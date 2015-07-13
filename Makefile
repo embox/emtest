@@ -9,7 +9,7 @@ default: all
 all: emtest
 
 emtest: emtest.o
-	$(LD) -o emtest emtest.o
+	$(LD) -T ./util/array_spread.lds -o emtest emtest.o
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
