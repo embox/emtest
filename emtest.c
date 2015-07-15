@@ -1,8 +1,10 @@
 #include <stddef.h>
 #include <stdio.h>
 
-void (*all_tests[])(void) __attribute__((section(".array_spread.all_tests_0_head.rodata"))) = {};
-void (*all_tests__tail[])(void) __attribute__((section(".array_spread.all_tests_9_tail.rodata"))) = {};
+static void (*all_tests[])(void) __attribute__((used,
+		section(".array_spread.all_tests_0_head.rodata,\"a\",%progbits;#"))) = {};
+static void (*all_tests__tail[])(void) __attribute__((used,
+		section(".array_spread.all_tests_9_tail.rodata,\"a\",%progbits;#"))) = {};
 
 int main(void){
     int i;
