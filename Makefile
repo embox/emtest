@@ -3,16 +3,20 @@ CFLAGS  = -g
 RM      = rm -f
 LD      = gcc
 
+OBJS = test1.o test2.o emtest.o
 
 default: all
 
 all: emtest
 
-emtest: emtest.o
-	$(LD) -T ./util/array_spread.lds -o emtest emtest.o
+emtest: $(OBJS)
+	$(LD) -T ./util/array_spread.lds -o emtest $(OBJS)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
+%.o : tests/%.c
+	$(CC) $(CFLAGS) -c $<
+
 clean:
-	$(RM) emtest emtest.o
+	$(RM) emtest $(OBJS)
