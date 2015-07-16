@@ -1,18 +1,21 @@
 #include <stddef.h>
 #include <stdio.h>
 
-static void (*all_tests[])(void) __attribute__((used,
-		section(".array_spread.all_tests_0_head.rodata,\"a\",%progbits;#"))) = {};
-static void (*all_tests__tail[])(void) __attribute__((used,
-		section(".array_spread.all_tests_9_tail.rodata,\"a\",%progbits;#"))) = {};
+#include "util/array_spread.h"
+
+#include "emtest.h"
+
+ARRAY_SPREAD_DEF(test_routine_t,all_tests);
 
 int main(void){
     int i;
+    void (*test) (void);
 
-    printf("%zu tests start\n", (size_t)(all_tests__tail - all_tests));
+    printf("%zu tests start\n", ARRAY_SPREAD_SIZE(all_tests));
 
-    for(i = 0; i < (size_t)(all_tests__tail - all_tests); i ++) {
-        all_tests[i]();
+    array_spread_foreach(test, all_tests) {
+    	test();
     }
+
     return 0;
 }
