@@ -74,11 +74,20 @@
  *   The @a element_type must include @c const modifier (see general docs).
  */
 #define ARRAY_SPREAD_DEF(element_type, name) \
+		ARRAY_SPREAD_TERM_DEF(element_type, name, /* empty */)
+
+#define ARRAY_SPREAD_TERM_DEF(element_type, name, _term) \
 		element_type volatile const name[] __attribute__ ((used,        \
 		/* Some versions of GCC do not take into an account section     \
 		 * attribute if it appears after the definition. */             \
 			section(__ARRAY_SPREAD_SECTION(name, "0_head")))) =         \
 			{ /* Empty anchor to the array head. */ };                  \
+		element_type volatile const __ARRAY_SPREAD_PRIVATE(name,term)[] \
+		__attribute__ ((used,                                           \
+		/* Some versions of GCC do not take into an account section     \
+		 * attribute if it appears after the definition. */             \
+			section(__ARRAY_SPREAD_SECTION(name, "8_term")))) =         \
+			{ _term };                                                    \
 		element_type volatile const __ARRAY_SPREAD_PRIVATE(name,tail)[] \
 		__attribute__ ((used,                                           \
 		/* Some versions of GCC do not take into an account section     \
@@ -126,5 +135,13 @@
 	for (typeof(element) volatile const *_ptr = (array),         \
 				*_end = _ptr + (ARRAY_SPREAD_SIZE(array));       \
 			(_ptr < _end) && (((element) = *_ptr) || 1); ++_ptr)
+
+#define array_spread_nullterm_foreach(element, array) \
+	__array_spread_nullterm_foreach_nm(element, array,  \
+			MACRO_GUARD(__ptr))
+
+#define __array_spread_nullterm_foreach_nm(element, array, _ptr) \
+	for (typeof(element) volatile const *_ptr = (array);         \
+			((element) = *_ptr); ++_ptr)
 
 #endif /* UTIL_ARRAY_H_ */
