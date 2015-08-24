@@ -5,8 +5,8 @@
 
 ARRAY_SPREAD_DECLARE(test_routine_t, all_tests);
 
-static void test_func_2(void) {
-	printf("test 2\n");
+static int test_func_2(void) {
+	return 0;
 }
 
 ARRAY_SPREAD_ADD(all_tests, test_func_2);
