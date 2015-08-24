@@ -6,17 +6,17 @@
 
 #include "emtest.h"
 
-ARRAY_SPREAD_DEF(test_routine_t,all_tests);
+ARRAY_SPREAD_DEF(struct test_case_desc *, all_tests);
 
 int main(void){
     int i;
-    test_routine_t test;
+    struct test_case_desc *test;
 
     printf("%zu tests start", ARRAY_SPREAD_SIZE(all_tests));
 
     array_spread_foreach(test, all_tests) {
-    	if (test()) {
-    		printf("error in test 0x%zu\n", (uintptr_t)test);
+    	if (test->routine()) {
+    		printf("error in test 0x%s\n", test->desc);
     		return 0;
     	}
     	printf(".");
